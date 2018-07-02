@@ -110,6 +110,7 @@ function DownloadRawdata($url, $cache_path, $zip)
  */
 function GetRawdata($type, $options)
 {
+	global $TVDB,$DAUMURL;
 	$url = $cache_path = NULL;
 	$zip = FALSE;
 
