@@ -60,7 +60,7 @@ VideoStation은 캐시 데이터 이용이 많습니다. VSDS 사용 전에 캐�
 
 VideoStation은 라이브러리 정보를 수정할 때 변경 된 정보를 저장하는 vsmeta파일을 생성합니다. 해당 파일을 전부 찾아 삭제 해야 합니다.
 
->ex. find /영상저장경로 -name *.vsmeta -exec rm -f {}\;
+>ex. find /영상저장경로 -name *.vsmeta -exec rm -rf {} \;
 
 
 #### 2) tvdb 캐시 데이터를 삭제 합니다. 아래 경로 에 있습니다.
