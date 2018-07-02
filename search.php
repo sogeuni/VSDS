@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-$TVDB = "fr" //TVDB의 한국어 정보를 가져오기 위한 옵션 선택 한다. 기본은 프랑스어 선택 시 TVDB의 한국어 정보를 가져온다.
+$TVDB = "fr"; //TVDB의 한국어 정보를 가져오기 위한 옵션 선택 한다. 기본은 프랑스어 선택 시 TVDB의 한국어 정보를 가져온다.
 $DAUMURL ="http://localhost/" //시놀로지 웹서버에 설치할 경우 localhost, 다른 곳에 설치 할 경우 해당 주소
 
 require_once(dirname(__FILE__) . '/../constant.php');
