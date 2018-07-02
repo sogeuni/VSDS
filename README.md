@@ -1,92 +1,86 @@
 # VSDS
 
-VideoStation¿¡¼­ ÇÑ±¹¾î ¹æ¼Û Á¤º¸¸¦ º¸´Ù Àß »ç¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÕ´Ï´Ù.
+VideoStationì—ì„œ í•œêµ­ì–´ ë°©ì†¡ ì •ë³´ë¥¼ ë³´ë‹¤ ìž˜ ì‚¬ìš©í•  ìˆ˜ ìžˆë„ë¡ í•©ë‹ˆë‹¤.
 
-VideoStation¿¡¼­ CacheÇÑ µ¥ÀÌÅÍ¸¦ ¸ðµÎ »èÁ¦ ÈÄ »ç¿ëÇÏ´Â °ÍÀ» ±ÇÀå ÇÕ´Ï´Ù.
-ÀÚ¼¼ÇÑ Cache µ¥ÀÌÅÍ »èÁ¦ ¹æ¹ýÀº º»¹® ÇÏ´Ü ÂüÁ¶ ¹Ù¶ø´Ï´Ù.
+VideoStationì—ì„œ Cacheí•œ ë°ì´í„°ë¥¼ ëª¨ë‘ ì‚­ì œ í›„ ì‚¬ìš©í•˜ëŠ” ê²ƒì„ ê¶Œìž¥ í•©ë‹ˆë‹¤.  
+ìžì„¸í•œ Cache ë°ì´í„° ì‚­ì œ ë°©ë²•ì€ ë³¸ë¬¸ í•˜ë‹¨ ì°¸ì¡° ë°”ëžë‹ˆë‹¤.
 
-TODO
+### 1. íŒŒì¼ ì„¤ì¹˜
 
-1. ÆÄÀÏ ¼³Ä¡
+* search.php 
 
-search.php 
+ì´ íŒŒì¼ì€ VideoStationì´ tvdbì—ì„œ í•„ìš”í•œ ì •ë³´ë¥¼ ì°¾ì•„ì„œ ë°©ì†¡ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” íŒŒì¼ìž…ë‹ˆë‹¤. 
+ì´ íŒŒì¼ì„ ê³ ì³ì„œ daumê³¼ tvdb ì¤‘ ì›í•˜ëŠ” ì •ë³´ë¥¼ ì“¸ ìˆ˜ ìžˆë„ë¡ í–ˆìŠµë‹ˆë‹¤.
+search.php íŒŒì¼ì„ ê¸°ì¡´ tvdbì˜ ê²½ë¡œì— ë³µì‚¬ í•´ ë„£ìŠµë‹ˆë‹¤. ê¸°ì¡´ search.phpë¥¼ ëŒ€ì²´í•©ë‹ˆë‹¤.
+ê¸°ì¡´ search.php íŒŒì¼ì˜ ê²½ë¡œëŠ” /volume1/@appstore/VideoStation/plugins/syno_thetvdb/ ìž…ë‹ˆë‹¤. 
+ì‚¬ìš©ìž ì„¤ì •ì— ë”°ë¼ ê²½ë¡œê°€ ë°”ë€” ìˆ˜ ìžˆìœ¼ë‹ˆ ë³¸ì¸ í™˜ê²½ì„ í™•ì¸í•´ì„œ ì°¾ì•„ ë´…ë‹ˆë‹¤.
 
-ÀÌ ÆÄÀÏÀº VideoStationÀÌ tvdb¿¡¼­ ÇÊ¿äÇÑ Á¤º¸¸¦ Ã£¾Æ¼­ ¹æ¼Û Á¤º¸¸¦ °¡Á®¿À´Â ÆÄÀÏÀÔ´Ï´Ù. 
-ÀÌ ÆÄÀÏÀ» °íÃÄ¼­ daum°ú tvdb Áß ¿øÇÏ´Â Á¤º¸¸¦ ¾µ ¼ö ÀÖµµ·Ï Çß½À´Ï´Ù.
-search.php ÆÄÀÏÀ» ±âÁ¸ tvdbÀÇ °æ·Î¿¡ º¹»ç ÇØ ³Ö½À´Ï´Ù. ±âÁ¸ search.php¸¦ ´ëÃ¼ÇÕ´Ï´Ù.
-±âÁ¸ search.php ÆÄÀÏÀÇ °æ·Î´Â /volume1/@appstore/VideoStation/plugins/syno_thetvdb/ ÀÔ´Ï´Ù. 
-»ç¿ëÀÚ ¼³Á¤¿¡ µû¶ó °æ·Î°¡ ¹Ù²ð ¼ö ÀÖÀ¸´Ï º»ÀÎ È¯°æÀ» È®ÀÎÇØ¼­ Ã£¾Æ º¾´Ï´Ù.
+* vs_daum_tvshow_series.php , vs_daum_tvshow_episode.php, vs_daum_tvshow_actor.php
 
-vs_daum_tvshow_series.php , vs_daum_tvshow_episode.php, vs_daum_tvshow_actor.php
+ìœ„ íŒŒì¼ë“¤ì€ daumì—ì„œ í•„ìš”í•œ ì •ë³´ë¥¼ ì°¾ì•„ì˜¤ëŠ” ì—­í• ì„ í•©ë‹ˆë‹¤. ìµœì†Œí•œì˜ ìž‘ì—…ë§Œ í•˜ê¸° ìœ„í•´ tvdbì²˜ëŸ¼ ì›¹ì—ì„œ ìž‘ë™í•˜ë„ë¡ í–ˆìŠµë‹ˆë‹¤. 
+ì‹œë†€ë¡œì§€ëŠ” ì† ì‰½ê²Œ ì›¹ì„œë²„ë¥¼ ë„ìš¸ ìˆ˜ ìžˆìœ¼ë‹ˆ ì›¹ì„œë²„ ìž‘ë™ì‹œí‚¤ê³  ì›¹ì„œë²„ì— 3ê°œ íŒŒì¼ì„ ì˜¬ë ¤ ë†“ìŠµë‹ˆë‹¤. 
+ì›¹ì„œë²„ì— ì˜¬ë¦° íŒŒì¼ì´ ìž˜ ë™ìž‘í•˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸ í•˜ë ¤ë©´ ë¸Œë¼ìš°ì €ì— ì•„ëž˜ì™€ ê°™ì´ ìž…ë ¥í•´ ë´…ë‹ˆë‹¤.
 
-À§ ÆÄÀÏµéÀº daum¿¡¼­ ÇÊ¿äÇÑ Á¤º¸¸¦ Ã£¾Æ¿À´Â ¿ªÇÒÀ» ÇÕ´Ï´Ù. ÃÖ¼ÒÇÑÀÇ ÀÛ¾÷¸¸ ÇÏ±â À§ÇØ tvdbÃ³·³ À¥¿¡¼­ ÀÛµ¿ÇÏµµ·Ï Çß½À´Ï´Ù. 
-½Ã³î·ÎÁö´Â ¼Õ ½±°Ô À¥¼­¹ö¸¦ ¶ç¿ï ¼ö ÀÖÀ¸´Ï À¥¼­¹ö ÀÛµ¿½ÃÅ°°í À¥¼­¹ö¿¡ 3°³ ÆÄÀÏÀ» ¿Ã·Á ³õ½À´Ï´Ù. 
-À¥¼­¹ö¿¡ ¿Ã¸° ÆÄÀÏÀÌ Àß µ¿ÀÛÇÏ´ÂÁö Å×½ºÆ® ÇÏ·Á¸é ºê¶ó¿ìÀú¿¡ ¾Æ·¡¿Í °°ÀÌ ÀÔ·ÂÇØ º¾´Ï´Ù.
+http://localhost/vs_daum_tvhshow_search.php?search="ë°©ì†¡ì œëª©" 
 
-http://localhost/vs_daum_tvhshow_search.php?search="¹æ¼ÛÁ¦¸ñ" 
+localhostëŠ” ë³¸ì¸ì˜ ì›¹ì„œë²„ ì£¼ì†Œìž…ë‹ˆë‹¤. ì‹œë†€ë¡œì§€ ê¸°ë³¸ ì›¹ì„œë²„ì— ì˜¬ë¦¬ì‹œë©´ localhostë¥¼ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 
-localhost´Â º»ÀÎÀÇ À¥¼­¹ö ÁÖ¼ÒÀÔ´Ï´Ù. ½Ã³î·ÎÁö ±âº» À¥¼­¹ö¿¡ ¿Ã¸®½Ã¸é localhost¸¦ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+### 2. í™˜ê²½ ì„¤ì •
 
-2. È¯°æ ¼³Á¤
+#### 1) Daumê³¼ TVDB ì •ë³´ ì„ íƒ í•˜ê¸°
 
-1) Daum°ú TVDB Á¤º¸ ¼±ÅÃ ÇÏ±â
+VideoStation ì¸í„°íŽ˜ì´ìŠ¤ë¥¼ ìˆ˜ì •í•˜ë ¤ë©´ ê³µì‚¬ê°€ í¬ê¸° ë•Œë¬¸ì— 'ë¹„ë””ì˜¤ ì •ë³´ ê²€ìƒ‰ ì–¸ì–´'ë¥¼ í•œêµ­ì–´ë¡œ ì„¤ì •í•˜ë©´ Daumì„ ì´ìš©í•˜ê³  ë‹¤ë¥¸ ì–¸ì–´ë¥¼ ì„ íƒí•˜ë©´ tvdbë¥¼ ì‚¬ìš©í•˜ë„ë¡ í–ˆìŠµë‹ˆë‹¤. 
+tvdbì˜ í•œêµ­ì–´ ì •ë³´ë¥¼ ì´ìš©í•˜ê³  ì‹¶ì„ ë•ŒëŠ” í”„ëž‘ìŠ¤ì–´ë¥¼ ì„ íƒí•©ë‹ˆë‹¤.  
+ì´ëŸ°ì‹ìœ¼ë¡œ ì •ë³´ë¥¼ ê°€ì ¸ì˜¨ë‹¤ê³  ë³´ì‹œë©´ ì´í•´ê°€ ì‰½ìŠµë‹ˆë‹¤.
 
-VideoStation ÀÎÅÍÆäÀÌ½º¸¦ ¼öÁ¤ÇÏ·Á¸é °ø»ç°¡ Å©±â ¶§¹®¿¡ 'ºñµð¿À Á¤º¸ °Ë»ö ¾ð¾î'¸¦ ÇÑ±¹¾î·Î ¼³Á¤ÇÏ¸é DaumÀ» ÀÌ¿ëÇÏ°í ´Ù¸¥ ¾ð¾î¸¦ ¼±ÅÃÇÏ¸é tvdb¸¦ »ç¿ëÇÏµµ·Ï Çß½À´Ï´Ù. 
-tvdbÀÇ ÇÑ±¹¾î Á¤º¸¸¦ ÀÌ¿ëÇÏ°í ½ÍÀ» ¶§´Â ÇÁ¶û½º¾î¸¦ ¼±ÅÃÇÕ´Ï´Ù.  
-ÀÌ·±½ÄÀ¸·Î Á¤º¸¸¦ °¡Á®¿Â´Ù°í º¸½Ã¸é ÀÌÇØ°¡ ½±½À´Ï´Ù.
+>í•œêµ­ì–´ : Daum í•œêµ­ì–´ ì •ë³´  
+>í”„ëž‘ìŠ¤ì–´ : TVDB í•œêµ­ì–´ ì •ë³´  
+>ì˜ì–´ : TVDB ì˜ì–´ ì •ë³´  
+>ì¼ë³¸ì–´ : TVDB ì¼ë³¸ì–´ ì •ë³´  
 
-ÇÑ±¹¾î : Daum ÇÑ±¹¾î Á¤º¸
-ÇÁ¶û½º¾î : TVDB ÇÑ±¹¾î Á¤º¸
-¿µ¾î : TVDB ¿µ¾î Á¤º¸
-ÀÏº»¾î : TVDB ÀÏº»¾î Á¤º¸
-
-search.php »ó´ÜÀÇ $TVDB º¯¼ö¸¦ ¹Ù²Ù¸é ÇÁ¶û½º°¡ ¾Æ´Ñ ¿øÇÏ´Â ±¹°¡·Î º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù. 
-¿¹¸¦µé¾î $TVDB=nl·Î ¼³Á¤ÇÏ¸é ³×´ú¶õµå¾î ¼±ÅÃ ½Ã TVDBÀÇ ÇÑ±¹¾î Á¤º¸¸¦ °¡Á®¿À°Ô µË´Ï´Ù.  
+search.php ìƒë‹¨ì˜ $TVDB ë³€ìˆ˜ë¥¼ ë°”ê¾¸ë©´ í”„ëž‘ìŠ¤ê°€ ì•„ë‹Œ ì›í•˜ëŠ” êµ­ê°€ë¡œ ë³€ê²½í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. 
+ì˜ˆë¥¼ë“¤ì–´ $TVDB=nlë¡œ ì„¤ì •í•˜ë©´ ë„¤ëœëž€ë“œì–´ ì„ íƒ ì‹œ TVDBì˜ í•œêµ­ì–´ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ê²Œ ë©ë‹ˆë‹¤.  
 
 
 
-2) À¥¼­¹ö °æ·Î º¯°æ
+#### 2) ì›¹ì„œë²„ ê²½ë¡œ ë³€ê²½
 
-±âº»ÀûÀ¸·Î localhost·Î ÀÛµ¿ÇÏ´Ï localhost¸¦ ÀÌ¿ëÇÒ °æ¿ì º¯°æÀÌ ÇÊ¿ä ¾ø½À´Ï´Ù.
-search.php ÆÄÀÏ »ó´Ü¿¡ $DAUMURLÀ» º»ÀÎÀÇ À¥¼­¹ö·Î º¯°æÇÕ´Ï´Ù. ÁÖÀÇÇÏ½Ç Á¡Àº ³¡¿¡ "/"¸¦ ²À ³ÖÀ¸¼Å¾ß ÇÕ´Ï´Ù.
-
-
-3) VideoStation Library Ãß°¡
-ÀÚ ÀÌÁ¦ È¯°æ ¼³Á¤µµ ³¡³µÀ¸´Ï VideoStation¿¡¼­ ÇÑ±¹¾î·Î µÈ ¶óÀÌºê·¯¸® ±¸Ãà ÇØ º¸½Ã±â ¹Ù¶ø´Ï´Ù.
-
-3. VideoStation Cache µ¥ÀÌÅÍ Á¤¸®
-VideoStationÀº Ä³½Ã µ¥ÀÌÅÍ ÀÌ¿ëÀÌ ¸¹½À´Ï´Ù. VSDS »ç¿ë Àü¿¡ Ä³½Ã Á¤¸®¸¦ ÃßÃµÇÕ´Ï´Ù. 
-Á¤¸®°¡ ¾ÈµÇ¸é ÀÌÀü Á¤º¸¸¦ °è¼Ó °¡Á®¿À°Ô µË´Ï´Ù. 
-
-1) vsmeta ÆÄÀÏ »èÁ¦
-
-VideoStationÀº ¶óÀÌºê·¯¸® Á¤º¸¸¦ ¼öÁ¤ÇÒ ¶§ º¯°æ µÈ Á¤º¸¸¦ ÀúÀåÇÏ´Â vsmetaÆÄÀÏÀ» »ý¼ºÇÕ´Ï´Ù. ÇØ´ç ÆÄÀÏÀ» ÀüºÎ Ã£¾Æ »èÁ¦ ÇØ¾ß ÇÕ´Ï´Ù.
-
-ex. find /¿µ»óÀúÀå°æ·Î -name *.vsmeta -exec rm -f {}\;
+ê¸°ë³¸ì ìœ¼ë¡œ localhostë¡œ ìž‘ë™í•˜ë‹ˆ localhostë¥¼ ì´ìš©í•  ê²½ìš° ë³€ê²½ì´ í•„ìš” ì—†ìŠµë‹ˆë‹¤.
+search.php íŒŒì¼ ìƒë‹¨ì— $DAUMURLì„ ë³¸ì¸ì˜ ì›¹ì„œë²„ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. ì£¼ì˜í•˜ì‹¤ ì ì€ ëì— "/"ë¥¼ ê¼­ ë„£ìœ¼ì…”ì•¼ í•©ë‹ˆë‹¤.
 
 
+#### 3) VideoStation Library ì¶”ê°€
+ìž ì´ì œ í™˜ê²½ ì„¤ì •ë„ ëë‚¬ìœ¼ë‹ˆ VideoStationì—ì„œ í•œêµ­ì–´ë¡œ ëœ ë¼ì´ë¸ŒëŸ¬ë¦¬ êµ¬ì¶• í•´ ë³´ì‹œê¸° ë°”ëžë‹ˆë‹¤.
 
-2) tvdb Ä³½Ã µ¥ÀÌÅÍ¸¦ »èÁ¦ ÇÕ´Ï´Ù. ¾Æ·¡ °æ·Î ¿¡ ÀÖ½À´Ï´Ù.
+### 3. VideoStation Cache ë°ì´í„° ì •ë¦¬
+VideoStationì€ ìºì‹œ ë°ì´í„° ì´ìš©ì´ ë§ŽìŠµë‹ˆë‹¤. VSDS ì‚¬ìš© ì „ì— ìºì‹œ ì •ë¦¬ë¥¼ ì¶”ì²œí•©ë‹ˆë‹¤. 
+ì •ë¦¬ê°€ ì•ˆë˜ë©´ ì´ì „ ì •ë³´ë¥¼ ê³„ì† ê°€ì ¸ì˜¤ê²Œ ë©ë‹ˆë‹¤. 
+
+#### 1) vsmeta íŒŒì¼ ì‚­ì œ
+
+VideoStationì€ ë¼ì´ë¸ŒëŸ¬ë¦¬ ì •ë³´ë¥¼ ìˆ˜ì •í•  ë•Œ ë³€ê²½ ëœ ì •ë³´ë¥¼ ì €ìž¥í•˜ëŠ” vsmetaíŒŒì¼ì„ ìƒì„±í•©ë‹ˆë‹¤. í•´ë‹¹ íŒŒì¼ì„ ì „ë¶€ ì°¾ì•„ ì‚­ì œ í•´ì•¼ í•©ë‹ˆë‹¤.
+
+>ex. find /ì˜ìƒì €ìž¥ê²½ë¡œ -name *.vsmeta -exec rm -f {}\;
+
+
+#### 2) tvdb ìºì‹œ ë°ì´í„°ë¥¼ ì‚­ì œ í•©ë‹ˆë‹¤. ì•„ëž˜ ê²½ë¡œ ì— ìžˆìŠµë‹ˆë‹¤.
 
 /volume1/@appstore/VideoStation/plugins/plugin_data/com.synology.TheTVDB 
 
-ex. rm -rf * 
+>ex. rm -rf * 
 
 
-
-3) VideoStation DB »èÁ¦ (±âÁ¸ ¶óÀÌºê·¯¸® Á¤º¸ »ç¶óÁý´Ï´Ù)
-ssh Á¢¼Ó ÈÄ ¾Æ·¡¿Í °°ÀÌ postgres ³» video_metadata DB¸¦ »èÁ¦ ÇÕ´Ï´Ù.
-
-ex.
-
-sudo -i
-su postgres
-psql
-drop database video_metadata
+#### 3) VideoStation DB ì‚­ì œ (ê¸°ì¡´ ë¼ì´ë¸ŒëŸ¬ë¦¬ ì •ë³´ ì‚¬ë¼ì§‘ë‹ˆë‹¤)
+ssh ì ‘ì† í›„ ì•„ëž˜ì™€ ê°™ì´ postgres ë‚´ video_metadata DBë¥¼ ì‚­ì œ í•©ë‹ˆë‹¤.
+>ex.  
+>sudo -i  
+>su postgres  
+>psql  
+>drop database video_metadata  
 
 
-4. VideoStation¿¡¼­ ¶óÀÌºê·¯¸® Á¤¸®ÇÏ´Â ÆÁÀ» ÇÏ³ª µå¸®ÀÚ¸é...
+### 4. VideoStationì—ì„œ ë¼ì´ë¸ŒëŸ¬ë¦¬ ì •ë¦¬í•˜ëŠ” 
 
-daumÀº "¹æ¼ÛÀÌ¸§ ½ÃÁð3" ÀÌ·¸°Ô ÆÄÀÏ¸íÀ» Àâ¾Æ ÁÖ¸é Á¦´ë·Î µÈ Á¤º¸¸¦ °¡Á®¿À´Â ¹Ý¸é "¹æ¼ÛÀÌ¸§.s03e00" ÀÌ·¸°Ô ÇÏ¸é ½ÃÁð Á¤º¸¸¦ ÀÎ½ÄÇÏÁö ¸øÇÕ´Ï´Ù. 
-tvdb´Â ¹Ý´ë·Î "¹æ¼ÛÀÌ¸§ ½ÃÁð3"ÀÌ¶ó°í ÇÏ¸é ÀÎ½ÄÇÏÁö ¸øÇÕ´Ï´Ù. 
-µû¶ó¼­ ÇÑ±¹¹æ¼ÛÀº ½ÃÁðÀ» ÆÄÀÏ¸í¿¡ ³Ö°í daumÀ» »ç¿ëÇÏ°í ¿Ü±¹¹æ¼ÛÀº tvdb¸¦ »ç¿ëÇÏ¸é ºñ±³Àû ¸¸Á·½º·¯¿î °á°ú¸¦ ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.
+daumì€ "ë°©ì†¡ì´ë¦„ ì‹œì¦Œ3" ì´ë ‡ê²Œ íŒŒì¼ëª…ì„ ìž¡ì•„ ì£¼ë©´ ì œëŒ€ë¡œ ëœ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë°˜ë©´ "ë°©ì†¡ì´ë¦„.s03e00" ì´ë ‡ê²Œ í•˜ë©´ ì‹œì¦Œ ì •ë³´ë¥¼ ì¸ì‹í•˜ì§€ ëª»í•©ë‹ˆë‹¤. 
+tvdbëŠ” ë°˜ëŒ€ë¡œ "ë°©ì†¡ì´ë¦„ ì‹œì¦Œ3"ì´ë¼ê³  í•˜ë©´ ì¸ì‹í•˜ì§€ ëª»í•©ë‹ˆë‹¤. 
+ë”°ë¼ì„œ í•œêµ­ë°©ì†¡ì€ ì‹œì¦Œì„ íŒŒì¼ëª…ì— ë„£ê³  daumì„ ì‚¬ìš©í•˜ê³  ì™¸êµ­ë°©ì†¡ì€ tvdbë¥¼ ì‚¬ìš©í•˜ë©´ ë¹„êµì  ë§Œì¡±ìŠ¤ëŸ¬ìš´ ê²°ê³¼ë¥¼ ì–»ì„ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
