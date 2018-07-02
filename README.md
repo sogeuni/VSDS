@@ -78,6 +78,7 @@ ssh 접속 후 아래와 같이 postgres 내 video_metadata DB를 삭제 합니�
 >psql  
 >drop database video_metadata  
 
+VideoStation을 삭제 후 재설치 하면 2번 3번의 과정은 쉽게 해결 되기도 합니다.
 
 ### 4. VideoStation에서 라이브러리 정리하는 팁
 
