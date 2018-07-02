@@ -21,7 +21,7 @@ search.php 파일을 기존 tvdb의 경로에 복사 해 넣습니다. 기존 se
 시놀로지는 손 쉽게 웹서버를 띄울 수 있으니 웹서버 작동시키고 웹서버에 3개 파일을 올려 놓습니다. 
 웹서버에 올린 파일이 잘 동작하는지 테스트 하려면 브라우저에 아래와 같이 입력해 봅니다.
 
-http://localhost/vs_daum_tvhshow_series.php?search="방송제목" 
+http://localhost/vs_daum_tvshow_series.php?search="방송제목" 
 
 localhost는 본인의 웹서버 주소입니다. 시놀로지 기본 웹서버에 올리시면 localhost를 사용할 수 있습니다.
 
