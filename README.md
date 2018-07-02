@@ -79,7 +79,7 @@ ssh 접속 후 아래와 같이 postgres 내 video_metadata DB를 삭제 합니�
 >drop database video_metadata  
 
 
-### 4. VideoStation에서 라이브러리 정리하는 
+### 4. VideoStation에서 라이브러리 정리하는 팁
 
 daum은 "방송이름 시즌3" 이렇게 파일명을 잡아 주면 제대로 된 정보를 가져오는 반면 "방송이름.s03e00" 이렇게 하면 시즌 정보를 인식하지 못합니다. 
 tvdb는 반대로 "방송이름 시즌3"이라고 하면 인식하지 못합니다. 
