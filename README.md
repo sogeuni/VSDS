@@ -1,7 +1,6 @@
 # VSDS
 
 VideoStation에서 한국어 방송 정보를 보다 잘 사용할 수 있도록 합니다.
-
 VideoStation에서 Cache한 데이터를 모두 삭제 후 사용하는 것을 권장 합니다.  
 자세한 Cache 데이터 삭제 방법은 본문 하단 참조 바랍니다.
 
@@ -14,16 +13,6 @@ VideoStation에서 Cache한 데이터를 모두 삭제 후 사용하는 것을 �
 search.php 파일을 기존 tvdb의 경로에 복사 해 넣습니다. 기존 search.php를 대체합니다.
 기존 search.php 파일의 경로는 /volume1/@appstore/VideoStation/plugins/syno_thetvdb/ 입니다. 
 사용자 설정에 따라 경로가 바뀔 수 있으니 본인 환경을 확인해서 찾아 봅니다.
-
-* vs_daum_tvshow_series.php , vs_daum_tvshow_episode.php, vs_daum_tvshow_actor.php
-
-위 파일들은 daum에서 필요한 정보를 찾아오는 역할을 합니다. 최소한의 작업만 하기 위해 tvdb처럼 웹에서 작동하도록 했습니다. 
-시놀로지는 손 쉽게 웹서버를 띄울 수 있으니 웹서버 작동시키고 웹서버에 3개 파일을 올려 놓습니다. 
-웹서버에 올린 파일이 잘 동작하는지 테스트 하려면 브라우저에 아래와 같이 입력해 봅니다.
-
-http://localhost/vs_daum_tvshow_series.php?search="방송제목" 
-
-localhost는 본인의 웹서버 주소입니다. 시놀로지 기본 웹서버에 올리시면 localhost를 사용할 수 있습니다.
 
 ### 2. 환경 설정
 
@@ -41,13 +30,9 @@ tvdb의 한국어 정보를 이용하고 싶을 때는 프랑스어를 선택합
 search.php 상단의 $TVDB 변수를 바꾸면 프랑스가 아닌 원하는 국가로 변경할 수 있습니다. 
 예를들어 $TVDB=nl로 설정하면 네덜란드어 선택 시 TVDB의 한국어 정보를 가져오게 됩니다.  
 
-
-
-#### 2) 웹서버 경로 변경
-
-기본적으로 localhost로 작동하니 localhost를 이용할 경우 변경이 필요 없습니다.
-search.php 파일 상단에 $DAUMURL을 본인의 웹서버로 변경합니다. 주의하실 점은 끝에 "/"를 꼭 넣으셔야 합니다.
-
+#### 2) TVDB의 FanArt 가져 오기
+search.php 파일 상단의 $FANART 변수를 true로 두면 TVDB의 멋진 FANART를 이용합니다. 다만 라이브러리 추가 하는 시간이 조금 늘어납니다.
+FANART가 필요 없을 경우 false로 설정합니다.
 
 #### 3) VideoStation Library 추가
 자 이제 환경 설정도 끝났으니 VideoStation에서 한국어로 된 라이브러리 구축 해 보시기 바랍니다.
