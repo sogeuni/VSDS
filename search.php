@@ -203,14 +203,7 @@ function getFanArtfromTVDB($title){
 	$url2 = "http://thetvdb.com/api/1D62F2F90030C444/series/";
 	preg_match('/<seriesid>(\d+?)<\/seriesid>/i',HTTPGETRequest($url1),$seriesid);
 	preg_match('/<fanart>(.+?)<\/fanart>/i',HTTPGETRequest($url2.$seriesid[1]),$fanartid);
-	loga($title . " : " .(string)$fanartid[1]);
 	return (string)$fanartid[1];
-}
-
-function loga($text){
-	$logfile=file_get_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt");
-	$logfile .=$text."\n";
-	file_put_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt",$logfile);
 }
 
 /***
