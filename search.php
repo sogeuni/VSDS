@@ -2,7 +2,7 @@
 <?php
 
 $TVDB = "fr"; //TVDB의 한국어 정보를 가져오기 위한 옵션 선택 한다. 기본은 프랑스어 선택 시 TVDB의 한국어 정보를 가져온다.
-$DAUMURL ="http://localhost/"; //시놀로지 웹서버에 설치할 경우 localhost, 다른 곳에 설치 할 경우 해당 주소
+$FANART = true; // tvdb의 fanart 정보를 가져오려면 true로 설정. 검색 속도가 느려질 수 있다.
 
 require_once(dirname(__FILE__) . '/../constant.php');
 
@@ -40,6 +40,182 @@ function ConvertToAPILang($lang)
  * @param $cache_path [in] a expected cache path
  * @return [out] a xml format result
  */
+ 
+function getSearch($keyword){
+	$url="http://movie.daum.net/data/movie/search/v2/tv.json?size=20&start=1&searchText=".$keyword;
+	$dataSet=array();
+	$rawdata=json_decode(file_get_contents($url),true);
+	for($i=0;$i<$rawdata["count"];$i++){
+		$year=substr($rawdata["data"][$i]["startDate"],0,4);
+		$month=substr($rawdata["data"][$i]["startDate"],4,2);
+		$day=substr($rawdata["data"][$i]["startDate"],6,2);
+		$dataSet[$i]["id"]=$rawdata["data"][$i]["tvProgramId"];
+		$dataSet[$i]["FirstAired"]=$year."-".$month."-".$day;
+		$dataSet[$i]["Genre"]=$rawdata["data"][$i]["genres"][0]["genreName"];
+		switch($rawdata["data"][$i]["countries"][0]["countryko"]){
+			case "대한민국":
+				$dataSet[$i]["Language"]="ko";
+				break;
+			case "미국":
+				$dataSet[$i]["Language"]="en";
+				break;
+			case "중국":
+				$dataSet[$i]["Language"]="cn";
+				break;
+			case "일본":
+				$dataSet[$i]["Language"]="jp";
+				break;
+			default:
+				$dataSet[$i]["Language"]="ko";
+		}
+		$dataSet[$i]["Network"]=$rawdata["data"][$i]["channel"]["titleKo"];
+		$dataSet[$i]["Overview"]="-";
+		$dataSet[$i]["SeriesName"]=$rawdata["data"][$i]["titleKo"];
+		$dataSet[$i]["poster"]=$rawdata["data"][$i]["photo"]["fullname"];
+	}
+	return makeXML("search",$dataSet);
+}
+
+function getSeries($keyword){
+	global $FANART;
+	$options = array(
+		'http'=>array(
+		'method'=>"GET",
+		'header'=>"Accept-language: en\r\n" .
+				"Cookie: foo=bar\r\n" .  
+				"User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" 
+		)
+	);
+	$seriesurl="http://movie.daum.net/tv/main?tvProgramId=".$keyword;
+	$episodeurl="http://movie.daum.net/tv/episode?tvProgramId=".$keyword;
+	$dataSet=array();
+	$context=stream_context_create($options);
+	$seriesdata=file_get_contents($seriesurl,false,$context);
+	preg_match('/tvProgramId=(\d+)/i',$seriesdata,$id);
+	preg_match('/<dt>현재<\/dt>.+?(\d+?\.\d+?\.\d+?)~.+?<\/dd>/is',$seriesdata,$startDate);
+	preg_match('/<dt>장르<\/dt><dd class="f_l">(.+?)<\/dd>/i',$seriesdata,$genre);
+	preg_match('/<dt>국가<\/dt>.+?<\/span>(.+?)<\/dd>/is',$seriesdata,$language);
+	preg_match('/<dt>방송국 및 방영시간<\/dt>.+?g">(.+?)<\/em>/is',$seriesdata,$Network);
+	preg_match('/<meta property="og:description" content="(.+?)">/i',$seriesdata,$Overview);
+	preg_match('/<title>(.+?)-.+?<\/title>/i',$seriesdata,$SeriesName);
+	preg_match('/<div class="detail_summarize">.+?<img src="(.+?)" class/is',$seriesdata,$poster);
+	$dataSet[0]['id']=$id[1];
+	$tempdate=explode(".",$startDate[1]);
+	$dataSet[0]['FirstAired']=$tempdate[0]."-".$tempdate[1]."-".$tempdate[2];
+	$dataSet[0]['Genre']=$genre[1];
+	switch(trim($language[1])){
+			case "대한민국":
+				$dataSet[0]['Language']="ko";
+				break;
+			case "미국":
+				$dataSet[0]['Language']="en";
+				break;
+			case "중국":
+				$dataSet[0]['Language']="cn";
+				break;
+			case "일본":
+				$dataSet[0]['Language']="jp";
+				break;
+			default:
+				$dataSet[0]['Language']="ko";
+	}
+	$dataSet[0]['Network']=$Network[1];
+	$dataSet[0]['Overview']=$Overview[1];
+	$dataSet[0]['SeriesName']=trim($SeriesName[1]);
+	$dataSet[0]['poster']=$poster[1];
+	if($FANART) $dataSet[0]['fanart']=getFanArtfromTVDB($dataSet[0]['SeriesName']);
+	$episodedata=file_get_contents($episodeurl,false,$context);
+	preg_match('/MoreView.init\(\d+?,\s(.+?])\);/is',$episodedata,$epidata);
+	$jsonData=json_decode($epidata[1],true);
+	for($i=0;$i<count($jsonData);$i++){
+		$year=substr($jsonData[$i]['channels'][0]["broadcastDate"],0,4);
+		$month=substr($jsonData[$i]['channels'][0]["broadcastDate"],4,2);
+		$day=substr($jsonData[$i]['channels'][0]["broadcastDate"],6,2);
+		$dataSet[1][$i]['id']=$jsonData[$i]['episodeId'];
+		if($jsonData[$i]['title']="") $jsonData[$i]['title']=$jsonData[$i]['name']."회";
+		$dataSet[1][$i]['EpisodeName']=$jsonData[$i]['title'];
+		$dataSet[1][$i]['EpisodeNumber']=$jsonData[$i]['name'];
+		$dataSet[1][$i]['FirstAired']=$year."-".$month."-".$day;
+		$dataSet[1][$i]['Overview']=preg_replace("/[#\&\+\-%@=\/\\\:;,'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",strip_tags($jsonData[$i]['introduceDescription']));
+		$dataSet[1][$i]['SeasonNumber']=1;
+		$dataSet[1][$i]['seasonid']=1;
+		$dataSet[1][$i]['seriesid']=$jsonData[$i]['programId'];
+	}
+	return makeXML("series",$dataSet);
+}
+
+function makeXML($request,$dataSet){
+	if($request=="search"){
+		$xml = "<?xml version='1.0' encoding='UTF-8'?>";
+		$xml .= "<Data>";
+		for($i=0;$i<count($dataSet);$i++){
+			$xml .= "<Series>";
+			$xml .= "<seriesid>".$dataSet[$i]["id"]."</seriesid>";
+			$xml .= "<id>".$dataSet[$i]["id"]."</id>";
+			$xml .= "<FirstAired>".$dataSet[$i]["FirstAired"]."</FirstAired>";
+			$xml .= "<Genre>".$dataSet[$i]["Genre"]."</Genre>";
+			$xml .= "<language>".$dataSet[$i]["Language"]."</language>";
+			$xml .= "<Network>".$dataSet[$i]["Network"]."</Network>";
+			$xml .= "<Overview>".$dataSet[$i]["Overview"]."</Overview>";
+			$xml .= "<SeriesName>".$dataSet[$i]["SeriesName"]."</SeriesName>";
+			$xml .= "<poster>".$dataSet[$i]["poster"]."</poster>";
+			$xml .= "</Series>";
+		}
+		$xml .= "</Data>";
+	}
+	else if ($request == "series"){
+			$xml = "<?xml version='1.0' encoding='UTF-8'?>";
+			$xml .= "<Data>";
+			$xml .= "<Series>";
+			$xml .= "<id>".$dataSet[0]["id"]."</id>";
+			$xml .= "<FirstAired>".$dataSet[0]["FirstAired"]."</FirstAired>";
+			$xml .= "<Genre>".$dataSet[0]["Genre"]."</Genre>";
+			$xml .= "<Language>".$dataSet[0]["Language"]."</Language>";
+			$xml .= "<Network>".$dataSet[0]["Network"]."</Network>";
+			$xml .= "<Overview>".$dataSet[0]["Overview"]."</Overview>";
+			$xml .= "<SeriesName>".$dataSet[0]["SeriesName"]."</SeriesName>";
+			$xml .= "<poster>".$dataSet[0]["poster"]."</poster>";
+			$xml .= "<fanart>".$dataSet[0]["fanart"]."</fanart>";
+			$xml .= "</Series>";
+			for($i=0;$i<count($dataSet[1]);$i++){
+			$xml .= "<Episode>";
+			$xml .= "<id>".$dataSet[1][$i]['id']."</id>";
+			$xml .= "<EpisodeName>".$dataSet[1][$i]['title']."</EpisodeName>";
+			$xml .= "<EpisodeNumber>".$dataSet[1][$i]['EpisodeNumber']."</EpisodeNumber>";
+			$xml .= "<FirstAired>".$dataSet[1][$i]['FirstAired']."</FirstAired>";
+			$xml .= "<Overview>".$dataSet[1][$i]['Overview']."</Overview>";
+			$xml .= "<SeasonNumber>".$dataSet[1][$i]['SeasonNumber']."</SeasonNumber>";
+			$xml .= "<seasonid>".$dataSet[1][$i]['seasonid']."</seasonid>";
+			$xml .= "<seriesid>".$dataSet[1][$i]['seriesid']."</seriesid>";
+			$xml .= "</Episode>";
+			}
+			$xml .= "</Data>";
+	}
+	else if ($request == "actors"){
+			$xml = "<?xml version='1.0' encoding='UTF-8'?>";
+			$xml .= "<Actors> </Actors>";
+	}
+	return $xml;
+}
+
+function getFanArtfromTVDB($title){
+	$url1 = "https://www.thetvdb.com/api/GetSeries.php?language=ko&seriesname=".urlencode($title);
+	$url2 = "http://thetvdb.com/api/1D62F2F90030C444/series/";
+	preg_match('/<seriesid>(\d+?)<\/seriesid>/i',HTTPGETRequest($url1),$seriesid);
+	preg_match('/<fanart>(.+?)<\/fanart>/i',HTTPGETRequest($url2.$seriesid[1]),$fanartid);
+	loga($title . " : " .(string)$fanartid[1]);
+	return (string)$fanartid[1];
+}
+
+function loga($text){
+	$logfile=file_get_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt");
+	$logfile .=$text."\n";
+	file_put_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt",$logfile);
+}
+
+/***
+* url에 daum이 포함 될 경우 daum 데이터 받아 오도록 분기를 추가 함
+***/
 function DownloadRawdata($url, $cache_path, $zip)
 {
 	$xml = FALSE;
@@ -83,12 +259,33 @@ function DownloadRawdata($url, $cache_path, $zip)
 
 		//download a regular file
 		} else {
-			$fh = fopen($cache_path, 'w');
-			if (FALSE === $fh) {
-				throw new Exception();
-			}
-			$response = HTTPGETDownload($url, $fh);
-			fclose($fh);
+				$fh = fopen($cache_path, 'w');
+				if (FALSE === $fh) {
+					throw new Exception();
+				}
+				// IF it is daum
+				if(strstr($url,'daum') !== FALSE){
+					$request=explode("/",$url);
+					//preg_match('/daum\/(.*?)\/(.*?)/i',$url,$request);
+					switch($request[1]){
+						case "search":
+							$xml = getSearch($request[2]);
+							break;
+						case "series":
+							$xml = getSeries($request[2]);
+							break;
+						case "actors":
+							$xml = makeXML("actors",0);
+							break;
+					}
+					$response = fwrite($fh, $xml);
+					fclose($fh);
+
+				}
+				else{
+					$response = HTTPGETDownload($url, $fh);
+					fclose($fh);
+				}
 		}
 
 		if (FALSE === $response) {
@@ -104,20 +301,20 @@ function DownloadRawdata($url, $cache_path, $zip)
 	return $xml;
 }
 
-/**
- * daum 메타데이터 사용을 위해 한국어 설정 시 daum 데이터를 사용 하도록 변경
- * 한국어 : 다음 , 프랑스어 : tvdb의 한국어 정보, 영어 : tvdb의 영어 정보
- */
+/***
+* daum 정보를 사용 하기 위해 한국어의 경우 url을 변경 한다.
+* TVDB의 한국어 정보를 사용하기 위해 $TVDB에 설정 된 언어의 URL을 변경 한다. 
+* 한국어 : 다음 , 프랑스어 : tvdb의 한국어 정보, 영어 : tvdb의 영어 정보
+***/
 function GetRawdata($type, $options)
 {
-	global $TVDB,$DAUMURL;
+	global $TVDB;
 	$url = $cache_path = NULL;
 	$zip = FALSE;
-
 	if (0 == strcmp($type, "search")) {
 		$query 		= urlencode($options['query']);
 		$lang 		= $options['lang'];
-		if($lang == "ko") $url = $DAUMURL."vs_daum_tvshow_series.php?search={$query}";
+		if($lang == "ko") $url = "daum/search/{$query}";
 		else if($lang == $TVDB) $url = API_URL . "GetSeries.php?language=ko&seriesname={$query}";
 		else $url = API_URL . "GetSeries.php?language={$lang}&seriesname={$query}";
 		$cache_path = GetPluginDataDirectory(PLUGINID) . "/query/{$query}_{$lang}.xml";
@@ -126,7 +323,7 @@ function GetRawdata($type, $options)
 		$lang 		= $options['lang'];
 		$lang2		= $lang;
 		if($lang == "ko") {
-			$url = $DAUMURL."vs_daum_tvshow_episode.php?id={$id}";
+			$url = "daum/series/{$id}";
 		}
 		else if ($lang == $TVDB) {
 			$lang2 = "ko";
@@ -143,7 +340,7 @@ function GetRawdata($type, $options)
 		$lang 		= $options['lang'];
 		$lang2		= $lang;
 		if($lang == "ko") {
-			$url = $DAUMURL."vs_daum_tvshow_actor.php";
+			$url = "daum/actors/0";
 		}
 		else if ($lang == $TVDB) {
 			$lang2 = "ko";
@@ -226,7 +423,7 @@ function ParseTVShowData($series_data, $actors, $data)
 	return $data;
 }
 
-function ParseEpisodeData($series_data, $actors, $episode_data, $data)
+function ParsedataSet($series_data, $actors, $episode_data, $data)
 {
 	$data['season'] 			= (int)$episode_data->SeasonNumber;
 	$data['episode'] 			= (int)$episode_data->EpisodeNumber;
@@ -341,7 +538,7 @@ function GetTVShowInfo($series_data, $actors, $data)
 	//Fill all episode information
 	$list = array();
 	foreach ($series_data->Episode as $item) {
-		$item = ParseEpisodeData($series_data, $actors, $item, array());
+		$item = ParsedataSet($series_data, $actors, $item, array());
 		InsertItemToList($item, $list);
 	}
 	SortList($list);
@@ -381,7 +578,7 @@ function GetEpisodeInfo($series_data, $actors, $season, $episode, $data)
 
 	//Fill episode information
 	if ($episode_data) {
-		$data = ParseEpisodeData($series_data, $actors, $episode_data, $data);
+		$data = ParsedataSet($series_data, $actors, $episode_data, $data);
 	}
 
 	return $data;
