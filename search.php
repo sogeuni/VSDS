@@ -136,7 +136,7 @@ function getSeries($keyword){
 		$dataSet[1][$i]['EpisodeName']=$jsonData[$i]['title'];
 		$dataSet[1][$i]['EpisodeNumber']=$jsonData[$i]['name'];
 		$dataSet[1][$i]['FirstAired']=$year."-".$month."-".$day;
-		$dataSet[1][$i]['Overview']=preg_replace("/[#\&\+\-%@=\/\\\:;,'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",strip_tags($jsonData[$i]['introduceDescription']));
+		$dataSet[1][$i]['Overview']=preg_replace("/[#\&\+\-%@=\/\\\:;,'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$jsonData[$i]['introduceDescription']);
 		$dataSet[1][$i]['SeasonNumber']=1;
 		$dataSet[1][$i]['seasonid']=1;
 		$dataSet[1][$i]['seriesid']=$jsonData[$i]['programId'];
