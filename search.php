@@ -78,19 +78,11 @@ function getSearch($keyword){
 
 function getSeries($keyword){
 	global $FANART;
-	$options = array(
-		'http'=>array(
-		'method'=>"GET",
-		'header'=>"Accept-language: en\r\n" .
-				"Cookie: foo=bar\r\n" .  
-				"User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" 
-		)
-	);
 	$seriesurl="http://movie.daum.net/tv/main?tvProgramId=".$keyword;
 	$episodeurl="http://movie.daum.net/tv/episode?tvProgramId=".$keyword;
 	$dataSet=array();
 	$context=stream_context_create($options);
-	$seriesdata=file_get_contents($seriesurl,false,$context);
+	$seriesdata=HTTPGETRequest($seriesurl);
 	preg_match('/tvProgramId=(\d+)/i',$seriesdata,$id);
 	preg_match('/<dt>현재<\/dt>.+?(\d+?\.\d+?\.\d+?)~.+?<\/dd>/is',$seriesdata,$startDate);
 	preg_match('/<dt>장르<\/dt><dd class="f_l">(.+?)<\/dd>/i',$seriesdata,$genre);
@@ -124,7 +116,7 @@ function getSeries($keyword){
 	$dataSet[0]['SeriesName']=trim($SeriesName[1]);
 	$dataSet[0]['poster']=$poster[1];
 	if($FANART) $dataSet[0]['fanart']=getFanArtfromTVDB($dataSet[0]['SeriesName']);
-	$episodedata=file_get_contents($episodeurl,false,$context);
+	$episodedata=HTTPGETRequest($episodeurl);
 	preg_match('/MoreView.init\(\d+?,\s(.+?])\);/is',$episodedata,$epidata);
 	$jsonData=json_decode($epidata[1],true);
 	for($i=0;$i<count($jsonData);$i++){
