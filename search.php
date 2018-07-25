@@ -42,37 +42,14 @@ function ConvertToAPILang($lang)
  */
  
 function getSearch($keyword){
-	$url="http://movie.daum.net/data/movie/search/v2/tv.json?size=20&start=1&searchText=".$keyword;
-	$dataSet=array();
-	$rawdata=json_decode(file_get_contents($url),true);
-	for($i=0;$i<$rawdata["count"];$i++){
-		$year=substr($rawdata["data"][$i]["startDate"],0,4);
-		$month=substr($rawdata["data"][$i]["startDate"],4,2);
-		$day=substr($rawdata["data"][$i]["startDate"],6,2);
-		$dataSet[$i]["id"]=$rawdata["data"][$i]["tvProgramId"];
-		$dataSet[$i]["FirstAired"]=$year."-".$month."-".$day;
-		$dataSet[$i]["Genre"]=$rawdata["data"][$i]["genres"][0]["genreName"];
-		switch($rawdata["data"][$i]["countries"][0]["countryko"]){
-			case "대한민국":
-				$dataSet[$i]["Language"]="ko";
-				break;
-			case "미국":
-				$dataSet[$i]["Language"]="en";
-				break;
-			case "중국":
-				$dataSet[$i]["Language"]="cn";
-				break;
-			case "일본":
-				$dataSet[$i]["Language"]="jp";
-				break;
-			default:
-				$dataSet[$i]["Language"]="ko";
-		}
-		$dataSet[$i]["Network"]=$rawdata["data"][$i]["channel"]["titleKo"];
-		$dataSet[$i]["Overview"]="-";
-		$dataSet[$i]["SeriesName"]=$rawdata["data"][$i]["titleKo"];
-		$dataSet[$i]["poster"]=$rawdata["data"][$i]["photo"]["fullname"];
-	}
+	$url="https://m.search.daum.net/search?w=tv&q=".$keyword."&irt=tv-program";
+	$rawdata=HTTPGETRequest($url);
+	preg_match("/smartLog.+?d=(\d+?)\',/i",$rawdata,$dataSet["id"]);
+	preg_match("/<span class=\"txt_bar\">.+?(\d{4}\.\d*\.\d*).+?<\/dd>/i",$rawdata,$dataSet["FirstAired"]);
+	preg_match("/<dt class=\"tit_base\">.+?<\/dt>\s<dd class=\"cont\">\s<span class=\"txt_info\">(.+?)<\/span>/i",$rawdata,$dataSet["Genre"]);
+	preg_match("/방영시간 정보.+?smartLog.+?d=\d+?\', event\);\"> (.+?) <\/a>/i",$rawdata,$dataSet["Network"]);
+	$dataSet["Language"]="한국어";
+	file_put_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt",$rawdata);
 	return makeXML("search",$dataSet);
 }
 
@@ -140,19 +117,14 @@ function makeXML($request,$dataSet){
 	if($request=="search"){
 		$xml = "<?xml version='1.0' encoding='UTF-8'?>";
 		$xml .= "<Data>";
-		for($i=0;$i<count($dataSet);$i++){
-			$xml .= "<Series>";
-			$xml .= "<seriesid>".$dataSet[$i]["id"]."</seriesid>";
-			$xml .= "<id>".$dataSet[$i]["id"]."</id>";
-			$xml .= "<FirstAired>".$dataSet[$i]["FirstAired"]."</FirstAired>";
-			$xml .= "<Genre>".$dataSet[$i]["Genre"]."</Genre>";
-			$xml .= "<language>".$dataSet[$i]["Language"]."</language>";
-			$xml .= "<Network>".$dataSet[$i]["Network"]."</Network>";
-			$xml .= "<Overview>".$dataSet[$i]["Overview"]."</Overview>";
-			$xml .= "<SeriesName>".$dataSet[$i]["SeriesName"]."</SeriesName>";
-			$xml .= "<poster>".$dataSet[$i]["poster"]."</poster>";
-			$xml .= "</Series>";
-		}
+		$xml .= "<Series>";
+		$xml .= "<seriesid>".$dataSet["id"][1]."</seriesid>";
+		$xml .= "<id>".$dataSet["id"][1]."</id>";
+		$xml .= "<FirstAired>".$dataSet["FirstAired"][1]."</FirstAired>";
+		$xml .= "<Genre>".$dataSet["Genre"][1]."</Genre>";
+		$xml .= "<language>".$dataSet["Language"]."</language>";
+		$xml .= "<Network>".$dataSet["Network"][1]."</Network>";
+		$xml .= "</Series>";
 		$xml .= "</Data>";
 	}
 	else if ($request == "series"){
