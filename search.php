@@ -48,17 +48,15 @@ function getSearch($keyword){
 	preg_match("/<span class=\"txt_bar\">.+?(\d{4}\.\d*\.\d*).+?<\/dd>/i",$rawdata,$dataSet["FirstAired"]);
 	preg_match("/<dt class=\"tit_base\">.+?<\/dt>\s<dd class=\"cont\">\s<span class=\"txt_info\">(.+?)<\/span>/i",$rawdata,$dataSet["Genre"]);
 	preg_match("/방영시간 정보.+?smartLog.+?d=\d+?\', event\);\"> (.+?) <\/a>/i",$rawdata,$dataSet["Network"]);
-	$dataSet["Language"]="한국어";
-	file_put_contents("/volume1/@appstore/VideoStation/plugins/syno_thetvdb/log.txt",$rawdata);
 	return makeXML("search",$dataSet);
 }
 
 function getSeries($keyword){
 	global $FANART;
+	if($keyword==0) return 0;
 	$seriesurl="http://movie.daum.net/tv/main?tvProgramId=".$keyword;
 	$episodeurl="http://movie.daum.net/tv/episode?tvProgramId=".$keyword;
 	$dataSet=array();
-	$context=stream_context_create($options);
 	$seriesdata=HTTPGETRequest($seriesurl);
 	preg_match('/tvProgramId=(\d+)/i',$seriesdata,$id);
 	preg_match('/<dt>현재<\/dt>.+?(\d+?\.\d+?\.\d+?)~.+?<\/dd>/is',$seriesdata,$startDate);
@@ -128,20 +126,20 @@ function makeXML($request,$dataSet){
 		$xml .= "</Data>";
 	}
 	else if ($request == "series"){
-			$xml = "<?xml version='1.0' encoding='UTF-8'?>";
-			$xml .= "<Data>";
-			$xml .= "<Series>";
-			$xml .= "<id>".$dataSet[0]["id"]."</id>";
-			$xml .= "<FirstAired>".$dataSet[0]["FirstAired"]."</FirstAired>";
-			$xml .= "<Genre>".$dataSet[0]["Genre"]."</Genre>";
-			$xml .= "<Language>".$dataSet[0]["Language"]."</Language>";
-			$xml .= "<Network>".$dataSet[0]["Network"]."</Network>";
-			$xml .= "<Overview>".$dataSet[0]["Overview"]."</Overview>";
-			$xml .= "<SeriesName>".$dataSet[0]["SeriesName"]."</SeriesName>";
-			$xml .= "<poster>".$dataSet[0]["poster"]."</poster>";
-			$xml .= "<fanart>".$dataSet[0]["fanart"]."</fanart>";
-			$xml .= "</Series>";
-			for($i=0;$i<count($dataSet[1]);$i++){
+		$xml = "<?xml version='1.0' encoding='UTF-8'?>";
+		$xml .= "<Data>";
+		$xml .= "<Series>";
+		$xml .= "<id>".$dataSet[0]["id"]."</id>";
+		$xml .= "<FirstAired>".$dataSet[0]["FirstAired"]."</FirstAired>";
+		$xml .= "<Genre>".$dataSet[0]["Genre"]."</Genre>";
+		$xml .= "<Language>".$dataSet[0]["Language"]."</Language>";
+		$xml .= "<Network>".$dataSet[0]["Network"]."</Network>";
+		$xml .= "<Overview>".$dataSet[0]["Overview"]."</Overview>";
+		$xml .= "<SeriesName>".$dataSet[0]["SeriesName"]."</SeriesName>";
+		$xml .= "<poster>".$dataSet[0]["poster"]."</poster>";
+		$xml .= "<fanart>".$dataSet[0]["fanart"]."</fanart>";
+		$xml .= "</Series>";
+		for($i=0;$i<count($dataSet[1]);$i++){
 			$xml .= "<Episode>";
 			$xml .= "<id>".$dataSet[1][$i]['id']."</id>";
 			$xml .= "<EpisodeName>".$dataSet[1][$i]['title']."</EpisodeName>";
@@ -152,8 +150,8 @@ function makeXML($request,$dataSet){
 			$xml .= "<seasonid>".$dataSet[1][$i]['seasonid']."</seasonid>";
 			$xml .= "<seriesid>".$dataSet[1][$i]['seriesid']."</seriesid>";
 			$xml .= "</Episode>";
-			}
-			$xml .= "</Data>";
+		}
+		$xml .= "</Data>";
 	}
 	else if ($request == "actors"){
 			$xml = "<?xml version='1.0' encoding='UTF-8'?>";
